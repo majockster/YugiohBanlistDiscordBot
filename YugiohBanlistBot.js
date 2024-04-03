@@ -36,7 +36,15 @@ client.on('ready', () => {
     commands.forEach(x => client.application.commands.create(x))
 })
 
+const { emitter } = require('./Events/UpdateEventHandler')
 const yugiohScrapper = require("./YugiohScrapper/YugiohScrapper")
+
+const callback = async () => {
+    let data = await dbHandler.GetBanlistCards(updatedFilter, true)
+    await SendUpdatedCardData(data, interaction)
+}
+
+emitter.on('change', callback)
 
 yugiohScrapper.ScrapeYugiohWebpage()
 
